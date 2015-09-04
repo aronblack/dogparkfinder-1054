@@ -1,0 +1,63 @@
+{% extends 'template.html' %}
+
+{% block map %}
+<div class="wrapper map-wrapper map-static">
+	<div id="map">
+		<img class="map-static" id="static-map-img" src="http://maps.google.com/maps/api/staticmap?size={{config.map_dimensions}}&amp;format=jpeg&amp;sensor=false&amp;zoom=7&amp;markers=icon:{{marker}}|{{parklat}},{{parklng}}">
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section>
+	<article class="park-info-box">
+			{% if not park.dogs %}
+				<div class="info">
+					<span class="icon" title="{{l.dogs_no}}">{{l.dogs_no}}</span>
+			{% else %}
+				{% if not park.restrictions %}
+					{% if not park.leashed %}
+						<div class="info free">
+							<span class="icon" title="{{l.dogs_free}}">{{l.dogs_free}}</span>
+					{% else %}
+						<div class="info leashed">
+							<span class="icon" title="{{l.dogs_leashed}}">{{l.dogs_leashed}}</span>
+					{% endif %}
+				{% else %}
+					<div class="info restrictions">
+						<span class="icon" title="{{l.dogs_restricted}}">{{l.dogs_restricted}}</span>
+				{% endif %}
+			{% endif %}
+			<h2 class="park-name">{{park.name}}</h2>
+			<p class="adr">{{park.address}}</p>
+			{% if not park.dogs %}
+				<p class="parktype">{{l.dogs_no}}</p>
+			{% else %}
+				{% if not park.restrictions %}
+					{% if not park.leashed %}
+						<p class="parktype">{{l.dogs_free}}</p>
+					{% else %}
+						<p class="parktype">{{l.dogs_leashed}}</p>
+					{% endif %}
+				{% else %}
+					<p class="parktype">{{l.dogs_restricted}}</p>
+				{% endif %}
+			{% endif %}
+			{% if park.notes %}
+			<p class="notes">{{park.notes}}</p>
+			{% endif %}
+			<ul class="rating">
+				<li class="overall" title="{{l.rate_overall}}"><span class="value">{{park.overallBayesian}}</span>{{l.rate_percent}}</li>
+				<li class="facility"><span title="{{l.rate_facility}}" class="icon"></span><span class="value">{{park.facilityBayesian}}</span>{{l.rate_percent}}</li>
+				<li class="friendly"><span title="{{l.rate_friendly}}" class="icon"></span><span class="value">{{park.friendlinessBayesian}}</span>{{l.rate_percent}}</li>
+				<li class="clean"><span title="{{l.rate_clean}}" class="icon"></span><span class="value">{{park.cleanlinessBayesian}}</span>{{l.rate_percent}}</li>
+				<li class="amount-ratings"><span class="value">{{park.amountVotes}}</span> {% ifequal park.amountVotes 1 %}{{l.rating}}{% else %}{{l.ratings}}{% endifequal %}</li>
+			</ul>
+		</div>
+	</article>
+	
+	<aside class="ratewidget">
+		{% include 'ratebox.html' %}
+	</aside>
+</section>
+{% endblock %}

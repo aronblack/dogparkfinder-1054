@@ -1,0 +1,148 @@
+{% extends 'template.html' %}
+
+{% block map %}
+	{% ifequal activeTab 'nearby' %}
+		<div class="wrapper map-static" id="map-wrapper">
+			{% if notExactLoc %}
+			<div id="not-exact-loc"><strong>Sorry, your exact location could not be found.</strong></div>
+			{% endif %}
+			<div id="map">
+				<img class="map-static" id="static-map-img" src="http://maps.google.com/maps/api/staticmap?size={{config.map_dimensions}}&amp;format=jpeg&amp;sensor=false&amp;zoom=7&amp;{{markers}}">
+			</div>
+		</div>
+	{% else %}
+		<div class="wrapper map-static no-map" id="map-wrapper">
+			<div id="map"><strong id="nearby-loader">{{l.nearby_parks}}</strong></div>
+		</div>
+	{% endifequal %}
+{% endblock %}
+
+{% block content %}
+<section class="parks-group">
+	<header class="inset-box inset-box-alt{% ifnotequal activeTab 'nearby' %} no-nearby{% endifnotequal %}{% ifnotequal activeTab 'clean' %} no-clean{% endifnotequal %}" id="tablist-wrapper">
+		<nav role="navigation">
+			<ul role="tablist" class="tablist clearfix">
+				<li id="nearby-tab" class="tab{% ifequal activeTab 'nearby' %} tab-active{% endifequal %}" role="tab" aria-controls="nearby" aria-selected="{% ifequal activeTab 'nearby' %}true{% else %}false{% endifequal %}"><a href="/nearby">{{l.nearby}}</a></li>
+				<li id="popular-tab" class="tab{% ifequal activeTab 'popular' %} tab-active{% endifequal %}" role="tab" aria-controls="popular" aria-selected="{% ifequal activeTab 'popular' %}true{% else %}false{% endifequal %}"><a href="/popular">{{l.popular}}</a></li>
+				<li id="friendly-tab" class="tab{% ifequal activeTab 'friendly' %} tab-active{% endifequal %}" role="tab" aria-controls="friendly" aria-selected="{% ifequal activeTab 'friendly' %}true{% else %}false{% endifequal %}"><a href="/friendly">{{l.friendly}}</a></li>
+				<li id="clean-tab" class="tab{% ifequal activeTab 'clean' %} tab-active{% endifequal %}" role="tab" aria-controls="clean" aria-selected="{% ifequal activeTab 'clean' %}true{% else %}false{% endifequal %}"><a href="/clean">{{l.clean}}</a></li>
+			</ul>
+		</nav>
+	</header>
+	<div class="wrapper parklists no-rating" id="parks">
+		
+		<div class="tabpanel{% ifequal activeTab 'nearby' %} tabpanel-expanded{% endifequal %}" id="nearby" role="tabpanel" aria-expanded="{% ifequal activeTab 'nearby' %}true{% else %}false{% endifequal %}" aria-live="polite" aria-labelledby="nearby-tab">
+			{% if nearby %}
+			<ol class="parks">
+				{% for park in nearby %}
+					<li data-guid="{{park.guid}}"{% if forloop.first %} class="first-child"{% endif %}>
+						<a href="/parks/{{park.guid}}" class="parkinfo" role="button">
+							<span class="rategroup"><span class="value">{{park.distance|floatformat:1}}</span><span class="symbol">{{l.distance_km}}</span></span>
+							<strong class="park-info"><span class="name">{{park.name}}</span> <small class="amount-votes"><span class="vote-total">{{park.amountVotes}}</span> {% ifequal park.amountVotes 1 %}{{l.rating}}{% else %}{{l.ratings}}{% endifequal %}</small></strong>
+							{% if not park.dogs %}
+							<em class="park-type">{{l.dogs_no}}</em>
+							{% else %}
+								{% if not park.restrictions %}
+									{% if not park.leashed %}
+										<em class="park-type free">{{l.dogs_free}}</em>
+									{% else %}
+										<em class="park-type leashed">{{l.dogs_leashed}}</em>
+									{% endif %}
+								{% else %}
+									<em class="park-type restrictions">{{l.dogs_restricted}}</em>
+								{% endif %}
+							{% endif %}
+						</a>
+						<a href="#rate" class="rate" role="button">{{l.rate}}</a>
+					</li>
+				{% endfor %}
+			</ol>
+			{% endif %}
+		</div>
+		
+		<div class="tabpanel{% ifequal activeTab 'popular' %} tabpanel-expanded{% endifequal %}" id="popular" role="tabpanel" aria-expanded="{% ifequal activeTab 'popular' %}true{% else %}false{% endifequal %}" aria-live="polite" aria-labelledby="popular-tab">
+			<ol class="parks">
+				{% for park in popular %}
+					<li data-guid="{{park.guid}}"{% if forloop.first %} class="first-child"{% endif %}>
+						<a href="/parks/{{park.guid}}" class="parkinfo" role="button">
+							<span class="rategroup"><span class="value">{{park.overallBayesian}}</span><span class="symbol">{{l.rate_percent}}</span></span>
+							<strong class="park-info"><span class="name">{{park.name}}</span> <small class="amount-votes"><span class="vote-total">{{park.amountVotes}}</span> {% ifequal park.amountVotes 1 %}{{l.rating}}{% else %}{{l.ratings}}{% endifequal %}</small></strong>
+							{% if not park.dogs %}
+							<em class="park-type">{{l.dogs_no}}</em>
+							{% else %}
+								{% if not park.restrictions %}
+									{% if not park.leashed %}
+										<em class="park-type free">{{l.dogs_free}}</em>
+									{% else %}
+										<em class="park-type leashed">{{l.dogs_leashed}}</em>
+									{% endif %}
+								{% else %}
+									<em class="park-type restrictions">{{l.dogs_restricted}}</em>
+								{% endif %}
+							{% endif %}
+						</a>
+						<a href="#rate" class="rate" role="button">{{l.rate}}</a>
+					</li>
+				{% endfor %}
+			</ol>
+		</div>
+		
+		<div class="tabpanel{% ifequal activeTab 'friendly' %} tabpanel-expanded{% endifequal %}" id="friendly" role="tabpanel" aria-expanded="{% ifequal activeTab 'friendly' %}true{% else %}false{% endifequal %}" aria-live="polite" aria-labelledby="friendly-tab">
+			<ol class="parks">
+				{% for park in friendly %}
+					<li data-guid="{{park.guid}}"{% if forloop.first %} class="first-child"{% endif %}>
+						<a href="/parks/{{park.guid}}" class="parkinfo" role="button">
+							<span class="rategroup"><span class="value">{{park.friendlinessBayesian}}</span><span class="symbol">{{l.rate_percent}}</span></span>
+							<strong class="park-info"><span class="name">{{park.name}}</span> <small class="amount-votes"><span class="vote-total">{{park.amountVotes}}</span> {% ifequal park.amountVotes 1 %}{{l.rating}}{% else %}{{l.ratings}}{% endifequal %}</small></strong>
+							{% if not park.dogs %}
+							<em class="park-type">{{l.dogs_no}}</em>
+							{% else %}
+								{% if not park.restrictions %}
+									{% if not park.leashed %}
+										<em class="park-type free">{{l.dogs_free}}</em>
+									{% else %}
+										<em class="park-type leashed">{{l.dogs_leashed}}</em>
+									{% endif %}
+								{% else %}
+									<em class="park-type restrictions">{{l.dogs_restricted}}</em>
+								{% endif %}
+							{% endif %}
+						</a>
+						<a href="#rate" class="rate" role="button">{{l.rate}}</a>
+					</li>
+				{% endfor %}
+			</ol>
+		</div>
+		
+		<div class="tabpanel{% ifequal activeTab 'clean' %} tabpanel-expanded{% endifequal %}" id="clean" role="tabpanel" aria-expanded="{% ifequal activeTab 'clean' %}true{% else %}false{% endifequal %}" aria-live="polite" aria-labelledby="clean-tab">
+			{% if clean %}
+			<ol class="parks">
+				{% for park in clean %}
+					<li data-guid="{{park.guid}}"{% if forloop.first %} class="first-child"{% endif %}>
+						<a href="/parks/{{park.guid}}" class="parkinfo" role="button">
+							<span class="rategroup"><span class="value">{{park.cleanlinessBayesian}}</span><span class="symbol">{{l.rate_percent}}</span></span>
+							<strong class="park-info"><span class="name">{{park.name}}</span> <small class="amount-votes"><span class="vote-total">{{park.amountVotes}}</span> {% ifequal park.amountVotes 1 %}{{l.rating}}{% else %}{{l.ratings}}{% endifequal %}</small></strong>
+							{% if not park.dogs %}
+							<em class="park-type">{{l.dogs_no}}</em>
+							{% else %}
+								{% if not park.restrictions %}
+									{% if not park.leashed %}
+										<em class="park-type free">{{l.dogs_free}}</em>
+									{% else %}
+										<em class="park-type leashed">{{l.dogs_leashed}}</em>
+									{% endif %}
+								{% else %}
+									<em class="park-type restrictions">{{l.dogs_restricted}}</em>
+								{% endif %}
+							{% endif %}
+						</a>
+						<a href="#rate" class="rate" role="button">{{l.rate}}</a>
+					</li>
+				{% endfor %}
+			</ol>
+			{% endif %}
+		</div>
+		
+	</div>
+</section>
+{% endblock %}

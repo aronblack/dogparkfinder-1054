@@ -1,0 +1,37 @@
+CACHE MANIFEST
+# rev 73
+
+# mobile
+/theme/css/basic.min.css
+/theme/js/modernizr-1.6.min.js
+/theme/js/app-basic.min.js
+
+/theme/favicon.ico
+/theme/img/icons-basic.png
+/theme/img/masthead-bg-basic.png
+
+
+# desktop
+/theme/css/enhanced.min.css
+/theme/css/enhanced-wide.min.css
+/app-enhanced.min.js
+/parks.js
+
+/theme/img/icons-enhanced.png
+/theme/img/loader.gif
+/theme/img/masthead-bg-enhanced.png
+/theme/img/parksloader.gif
+
+
+NETWORK:
+# Sites listed to work with Safari 4
+http://mt0.google.com/
+http://mt1.google.com/
+http://mt2.google.com/
+http://mt3.google.com/
+http://maps.google.com/
+http://maps.gstatic.com/
+http://gg.google.com/
+http://www.google-analytics.com/
+# Star should work, but Safari 4 has issues
+*

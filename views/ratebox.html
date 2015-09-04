@@ -1,0 +1,58 @@
+<form id="rate-form" method="post" action="/parks/{{guid}}/rate" accept-charset="utf-8">
+	<fieldset class="clearfix">
+		<h3>{{l.ratebox_facility}}</h3>
+		<p>{{l.ratebox_facility_desc}}</p>
+		<div>
+			<label for="facility-0" class="facility-0"><span></span>{{l.ratebox_facility_0}}</label>
+			<input type="radio" id="facility-0" name="facility" value="0">
+		</div>
+		<div>
+			<label for="facility-1" class="facility-1"><span></span>{{l.ratebox_facility_1}}</label>
+			<input type="radio" id="facility-1" name="facility" value="1">
+		</div>
+		<div>
+			<label for="facility-2" class="facility-2"><span></span>{{l.ratebox_facility_2}}</label>
+			<input type="radio" id="facility-2" name="facility" value="2">
+		</div>
+	</fieldset>
+	<fieldset class="clearfix">
+		<h3>{{l.ratebox_friendly}}</h3>
+		<p>{{l.ratebox_friendly_desc}}</p>
+		<div>
+			<label for="friendly-0" class="friendly-0"><span></span>{{l.ratebox_friendly_0}}</label>
+			<input type="radio" id="friendly-0" name="friendly" value="0">
+		</div>
+		<div>
+			<label for="friendly-1" class="friendly-1"><span></span>{{l.ratebox_friendly_1}}</label>
+			<input type="radio" id="friendly-1" name="friendly" value="1">
+		</div>
+		<div>
+			<label for="friendly-2" class="friendly-2"><span></span>{{l.ratebox_friendly_2}}</label>
+			<input type="radio" id="friendly-2" name="friendly" value="2">
+		</div>
+	</fieldset>
+	<fieldset class="clearfix">
+		<h3>{{l.ratebox_clean}}</h3>
+		<p>{{l.ratebox_clean_desc}}</p>
+		<div>
+			<label for="clean-0" class="clean-0"><span></span>{{l.ratebox_clean_0}}</label>
+			<input type="radio" id="clean-0" name="clean" value="0">
+		</div>
+		<div>
+			<label for="clean-1" class="clean-1"><span></span>{{l.ratebox_clean_1}}</label>
+			<input type="radio" id="clean-1" name="clean" value="1">
+		</div>
+		<div>
+			<label for="clean-2" class="clean-2"><span></span>{{l.ratebox_clean_2}}</label>
+			<input type="radio" id="clean-2" name="clean" value="2">
+		</div>
+	</fieldset>
+	<div class="buttons clearfix">
+		{% if rateBoxDisplayRateButton %}
+		<button type="submit" class="btn" id="rate-button">{{l.rate}}</button>
+		{% else %}
+		<button type="submit" class="btn" id="rate-button">{{l.ratebox_submit}}</button>
+		{% endif %}
+		{% if rateBoxDisplayCancel %}<a href="#cancel" class="btn btn-alt" id="cancel-button">{{l.ratebox_cancel}}</a>{% endif %}
+	</div>
+</form>

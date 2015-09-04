@@ -1,0 +1,38 @@
+# Ottawa Dog Park Finder
+# @author Aron Black <harry.shakedown@gmail.com>
+
+application: dogparkfinder-1054
+version: 2-5-7
+runtime: python
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /cache.manifest
+  mime_type: text/cache-manifest
+  static_files: cache.manifest
+  upload: cache.manifest
+
+- url: /remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
+
+- url: /theme
+  static_dir: theme
+  expiration: "90d"
+
+- url: /favicon.ico
+  static_files: theme/favicon.ico
+  upload: theme/favicon.ico
+  expiration: "90d"
+
+- url: /robots.txt
+  static_files: robots.txt
+  upload: robots.txt
+  expiration: "90d"
+
+- url: .*
+  script: main.py
+
+builtins:
+- datastore_admin: on

@@ -1,0 +1,4 @@
+cron:
+- description: Daily Bayesian Calculations
+  url: /tasks/bayesian
+  schedule: every day 03:00

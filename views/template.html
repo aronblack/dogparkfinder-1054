@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html lang="en-ca" class="no-js ie6"><![endif]-->
+<!--[if (IE 7) & !(IEMobile)]><html lang="en-ca" class="no-js ie7"><![endif]-->
+<!--[if (IE 7) & (IEMobile)]><html lang="en-ca" class="no-js ie7 ie7mobile"><![endif]-->
+<!--[if IE 8]><html lang="en-ca" class="no-js ie8"><![endif]-->
+<!--[if IE 9]><html lang="en-ca"{% ifnotequal config.env 'dev' %}{% if not isNearby %} manifest="/cache.manifest"{% endif %}{% endifnotequal %} class="no-js ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en-ca"{% ifnotequal config.env 'dev' %}{% if not isNearby %} manifest="/cache.manifest"{% endif %}{% endifnotequal %} class="no-js"><!--<![endif]--><head>
+	<meta charset="utf-8">
+	<title>{% block title %}{{title}}{% endblock %}{{l.odpf}} · {{l.odb}}</title>
+	<meta name="application-name" content="{{l.odpf}}">
+	<meta name="author" content="{{l.authro}}">
+	<meta name="keywords" content="{{l.keywords}}">
+	<meta name="description" content="{{l.description}}">
+	<meta name="ICBM" content="{{l.geo_position_lat}},{{l.geo_position_lng}}">
+	<meta name="geo.position" content="{{l.geo_position_lat}},{{l.geo_position_lng}}">
+	<meta name="geo.placename" content="{{l.geo_placename}}">
+	<meta name="geo.region" content="{{l.geo_region}}">
+	<meta name="handheldfriendly" content="true">
+	<meta name="mobileoptimized" content="240">
+	<meta name="viewport" content="width=device-width,initial-scale=7,user-scalable=no,maximum-scale=10.0,minimum-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	{% ifequal config.env 'dev' %}
+	
+<link rel="stylesheet" href="/theme/css/basic.css" media="screen,handheld,projection,tv">
+	{% else %}
+	<link rel="stylesheet" href="/theme/css/basic.min.css" media="screen,handheld,projection,tv">
+	{% endifequal %}
+	<script src="/theme/js/modernizr-1.6.min.js"></script>
+	<link rel="icon" href="/theme/favicon.ico" type="image/vnd.microsoft.icon">
+	<link rel="apple-touch-icon" href="/theme/apple-touch-icon.png">
+	<link rel="apple-touch-startup-image" href="/theme/apple-touch-startup-image.png">
+</head>
+  <body role="application">
+  
+  <div style="position:absolute; top:10px; left:250px">    <img src="/theme/img/look.png"></div>
+
+<header class="masthead" role="banner" id="top">
+	<h1 class="logo-wrapper" title="{{l.presented_by}}"><a class="logo" href="/">{{l.odpf}}</a></h1>
+
+	<h2 class="scoop" title="{{l.poop_scoop}}">{{l.poop_scoop}}</h2>
+</header>
+
+<div class="content-wrapper">
+	
+	<section role="main" class="map-group">
+		<header class="inset-box">
+			<div class="hwrapper clearfix">
+				<form method="get" action="/nearby" id="locform" accept-charset="utf-8" role="search" aria-controls="map">
+					<label for="loc" class="loc">{{l.location}}</label>
+					<input type="text" id="loc" name="l" class="location-field" value="{{loc}}">
+					<a href="/nearby" class="btn geo no-geo" id="currentloc" title="{{l.current_location_desc}}"><span>{{l.current_location}}</span></a>
+					<button type="submit" class="btn go">{{l.search}}</button>
+				</form>
+			</div>
+		</header>
+		{% block map %}{% endblock %}
+	</section>
+	
+	{% block content %}{% endblock %}
+	
+	<footer class="contentinfo inset-box2" role="contentinfo">
+		<nav>
+			<ul>
+				<li id="top-link"><a href="#top">{{l.top}}</a></li>
+				<li id="odb" class="producer"><a href="{{l.odb_link}}" title="{{l.odb_production}}">{{l.odb}}</a></li>
+				<li id="thomasjbradley" class="producer"><a href="{{l.tjb_link}}" title="{{l.tjb_developed}}" rel="external">{{l.thomasjbradley}}</a></li>
+			</ul>
+		</nav>
+	</footer>
+	
+</div>
+
+{% if rateBoxDisplayDialogue %}
+<div class="ratebox rate-dialog" role="dialog">
+	<div class="ratewidget" tabindex="-1">
+		<header>
+			<h2></h2>
+			<em title=""></em>
+		</header>
+		{% include 'ratebox.html' %}
+	</div>
+</div>
+{% endif %}
+
+<script>{% ifequal config.env 'dev' %}var env = 'dev';{% else %}var env = 'prod';{% endifequal %}</script>
+<script src="http://code.google.com/apis/gears/gears_init.js"></script>
+{% ifequal config.env 'dev' %}
+<script src="/theme/js/geo.min.js"></script>
+<script src="/theme/js/app-basic.js"></script>
+{% else %}
+<script src="/theme/js/app-basic.min.js"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18127888-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+{% endifequal %}
+</body>
+</html>
